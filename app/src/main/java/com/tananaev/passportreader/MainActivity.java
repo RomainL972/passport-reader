@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                         BigInteger keyId = publicKeyInfo.getKeyId();
                         PublicKey publicKey = publicKeyInfo.getSubjectPublicKey();
                         String oid = publicKeyInfo.getObjectIdentifier();
-                        service.doEACCA(keyId, ChipAuthenticationPublicKeyInfo.ID_CA_ECDH_AES_CBC_CMAC_256, oid, publicKey);
+                        service.doEACCA(keyId, ChipAuthenticationPublicKeyInfo.ID_CA_ECDH_3DES_CBC_CBC, oid, publicKey);
                         chipAuthSucceeded = true;
                     }
                 }
@@ -485,6 +485,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                // We perform Chip Authentication using Data Group 14
+                doChipAuth(service);
+
                 CardFileInputStream dg1In = service.getInputStream(PassportService.EF_DG1);
                 dg1File = new DG1File(dg1In);
 
@@ -493,9 +496,6 @@ public class MainActivity extends AppCompatActivity {
 
                 CardFileInputStream sodIn = service.getInputStream(PassportService.EF_SOD);
                 sodFile = new SODFile(sodIn);
-
-                // We perform Chip Authentication using Data Group 14
-                doChipAuth(service);
 
                 // Then Passive Authentication using SODFile
                 doPassiveAuth();
